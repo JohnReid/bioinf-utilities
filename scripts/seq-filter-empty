@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+#
+# Copyright John Reid 2010, 2012
+#
+
+"""
+Code that reads in sequences from a FASTA file and outputs the non-empty ones.
+"""
+
+
+import sys, corebio.seq_io.fasta_io as F, corebio.seq, numpy
+from optparse import OptionParser
+import bioinfutils
+
+
+#
+# Check args
+#
+if 2 != len(sys.argv):
+    print >> sys.stderr, 'USAGE: %s <fasta file>' % sys.argv[0]
+    sys.exit(-1)
+input = bioinfutils.open_input(sys.argv[1])
+
+#
+# Read the sequences
+#
+alphabet = corebio.seq.reduced_nucleic_alphabet
+for i, seq in enumerate(F.iterseq(input, alphabet)):
+    if len(seq):
+        F.writeseq(sys.stdout, seq)

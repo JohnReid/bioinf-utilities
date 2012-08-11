@@ -1,0 +1,28 @@
+#!/bin/bash -e
+
+
+#
+# Configuration
+#
+PYPI_NAME=bioinf-utilities
+DIR=www/$PYPI_NAME
+HOST=zemlinsky
+RSYNC="rsync --verbose  --progress --stats --compress --recursive --times --perms --links"
+
+
+
+#
+# Upload source build to pypi and our web host
+#
+python setup.py sdist upload --sign
+PACKAGE=$(ls -rt dist/*.tar.gz|tail -1) # get the latest package in dist/
+scp $PACKAGE $HOST:$DIR/dist/$(basename $PACKAGE)
+
+
+#
+# Remind user
+#
+echo "***************************************************************"
+echo "* Now is a good time to update the release number in setup.py *"
+echo "***************************************************************"
+
