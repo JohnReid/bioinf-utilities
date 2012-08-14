@@ -1,0 +1,29 @@
+#!/usr/bin/env python2
+#
+# Copyright John Reid 2012
+#
+
+"""
+Make all bases upper case. Trawler needs all sequences in upper case.
+"""
+
+
+import sys, corebio.seq_io.fasta_io as F, corebio.seq
+import bioinfutils
+
+
+#
+# Check args
+#
+if 2 != len(sys.argv):
+    print >>sys.stderr, 'USAGE: %s <fasta file>' % sys.argv[0]
+    sys.exit(-1)
+input = bioinfutils.open_input(sys.argv[1])
+
+
+#
+# Read the sequences
+#
+alphabet = corebio.seq.reduced_nucleic_alphabet
+for seq in F.iterseq(input, alphabet):
+    F.writeseq(sys.stdout, bioinfutils.upper(seq))

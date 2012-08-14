@@ -28,7 +28,7 @@ def strip_Ns(seq):
     "Strip Ns from beginning and end of the sequences."
     tag = '(stripped of Ns)'
     return corebio.seq.Seq(
-        seq.strip('N'),
+        seq.strip('Nn'),
         name='%s (stripped of Ns)' % seq.name,
         description='%s (stripped of Ns)' % seq.description,
         alphabet=seq.alphabet,
@@ -36,14 +36,27 @@ def strip_Ns(seq):
 
 
 
-_translate_table = string.maketrans('acgt', 'NNNN')
+_lower_mask_table = string.maketrans('acgt', 'NNNN')
 
 def mask_lower(seq):
     "Create a new sequence where lower case A,C,G,T are replaced with Ns. Useful for masking UCSC data."
     return corebio.seq.Seq(
-        seq.tostring().translate(_translate_table),
+        seq.tostring().translate(_lower_mask_table),
         name='%s (lower masked)' % seq.name,
         description='%s (lower masked)' % seq.description,
+        alphabet=seq.alphabet,
+    )
+
+
+
+_upper_table = string.maketrans('acgtn', 'ACGTN')
+
+def upper(seq):
+    "Create a new sequence where lower case A,C,G,T are replaced with upper case. Useful for masking UCSC data."
+    return corebio.seq.Seq(
+        seq.tostring().translate(_upper_table),
+        name=seq.name,
+        description=seq.description,
         alphabet=seq.alphabet,
     )
 
