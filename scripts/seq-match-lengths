@@ -10,15 +10,30 @@ Reads sequences from a FASTA file and shortens each sequence to match the length
 
 import sys, corebio.seq_io.fasta_io as F, corebio.seq
 import bioinfutils
+from optparse import OptionParser
+
+
+#
+# Parse the options
+#
+option_parser = OptionParser()
+option_parser.add_option(
+    '-r',
+    '--repeat',
+    action='store_true',
+    default=False,
+    help="Loop over the sequences to match.",
+)
+options, args = option_parser.parse_args()
 
 
 #
 # Check args
 #
-if 4 != len(sys.argv):
+if 3 != len(args):
     print >>sys.stderr, 'USAGE: %s <FASTA to match> <FASTA to shorten> <output FASTA>' % sys.argv[0]
     sys.exit(-1)
-fasta_to_match, fasta_to_shorten, fasta_output = sys.argv[1:4]
+fasta_to_match, fasta_to_shorten, fasta_output = args
 
 
 #
@@ -33,18 +48,18 @@ lengths.sort()
 #
 seqs_to_shorten = [seq for seq in F.iterseq(bioinfutils.open_input(fasta_to_shorten), alphabet)]
 seqs_to_shorten.sort(key = lambda seq: len(seq))
-if len(lengths) > len(seqs_to_shorten):
-    raise ValueError(
-        'Want to match lengths of %d sequences in %s but only have %d sequences in %s' % (
-            len(lengths), fasta_to_match, len(seqs_to_shorten), fasta_to_shorten
-        )
-    )
 output = bioinfutils.open_output(fasta_output)
 to_shorten = iter(seqs_to_shorten)
 for length in lengths:
     while True:
-        might_shorten = to_shorten.next()
-        if len(might_shorten) < length:
-            F.writeseq(output, bioinfutils.shorten(seq, length))
-            break
+        try:
+            might_shorten = to_shorten.next()
+            if len(might_shorten) >= length:
+                F.writeseq(output, bioinfutils.shorten(might_shorten, length))
+                break
+        except StopIteration:
+            if options.repeat:
+                to_shorten = iter(seqs_to_shorten)
+            else:
+                raise ValueError('Did not have %d long enough sequences.' % len(lengths))
 
