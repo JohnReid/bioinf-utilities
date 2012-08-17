@@ -11,27 +11,46 @@ Creates a FASTA file of the sequences stored in the interval file (BED, BED grap
 import logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-import biopsy.data.ucsc as UCSC, pybedtools, pyicl
+import biopsy.data.ucsc as UCSC, pybedtools, pyicl, sys
 from optparse import OptionParser
 from collections import defaultdict
+from Bio import SeqIO
+
 
 parser = OptionParser()
 options, args = parser.parse_args()
-if 2 != len(args):
-    raise RuntimeError('USAGE: %s <genome> <input file>' % input_filename)
+if 2 > len(args):
+    raise RuntimeError('USAGE: %s <genome> <input file>+' % sys.argv[0])
 genome_id = args[0]
-input_filename = args[1]
 
+#
+# We might be repeatedly running this script from an interactive session.
+# In that case we do not wish to create a new genome object every time.
+#
 try:
     genome
 except NameError:
     genome = UCSC.Genome(genome_id)
 
-regions = defaultdict(pyicl.IntIntervalSet)
-for x in pybedtools.BedTool(input_filename):
-    regions[x.chrom].add(pyicl.IntInterval(x.start, x.stop))
 
-for chr, intervals in regions.iteritems():
-    for x in intervals:
-        print genome[chr][x.lower:x.upper]
-        break
+#
+# For each input file
+#
+for input_filename in args[1:]:
+    #
+    # Combine the regions so we have one sequence for each contiguous interval
+    #
+    regions = defaultdict(pyicl.IntIntervalSet)
+    for x in pybedtools.BedTool(input_filename):
+        regions[x.chrom].add(pyicl.IntInterval(x.start, x.stop))
+
+    #
+    # Retrieve the sequences and write them as FASTA
+    #
+    output = open('%s.fa' % input_filename, 'w')
+    for chrom, intervals in regions.iteritems():
+        for x in intervals:
+            seq = genome[chrom][x.lower:x.upper]
+            seq.id = '%s:%d-%d' % (seq.id, x.lower, x.upper)
+            seq.name = seq.description = ''
+            SeqIO.write(seq, output, "fasta")
