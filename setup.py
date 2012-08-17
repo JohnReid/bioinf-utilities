@@ -18,6 +18,7 @@ setup(
     author            = 'John Reid',
     author_email      = 'johnbaronreid@netscape.net',
     scripts = [
+        'scripts/bedtools2fasta',
         'scripts/seq-filter-empty',
         'scripts/seq-head',
         'scripts/seq-info',
