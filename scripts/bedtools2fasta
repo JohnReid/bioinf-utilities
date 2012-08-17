@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+#
+# Copyright John Reid 2012
+#
+
+"""
+Creates a FASTA file of the sequences stored in the interval file (BED, BED graph, GFF).
+"""
+
+
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+import biopsy.data.ucsc as UCSC, pybedtools, pyicl
+from optparse import OptionParser
+from collections import defaultdict
+
+parser = OptionParser()
+options, args = parser.parse_args()
+if 2 != len(args):
+    raise RuntimeError('USAGE: %s <genome> <input file>' % input_filename)
+genome_id = args[0]
+input_filename = args[1]
+
+try:
+    genome
+except NameError:
+    genome = UCSC.Genome(genome_id)
+
+regions = defaultdict(pyicl.IntIntervalSet)
+for x in pybedtools.BedTool(input_filename):
+    regions[x.chrom].add(pyicl.IntInterval(x.start, x.stop))
+
+for chr, intervals in regions.iteritems():
+    for x in intervals:
+        print genome[chr][x.lower:x.upper]
+        break
