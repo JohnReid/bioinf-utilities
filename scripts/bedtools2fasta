@@ -22,6 +22,12 @@ options, args = parser.parse_args()
 if 2 > len(args):
     raise RuntimeError('USAGE: %s <genome> <input file>+' % sys.argv[0])
 genome_id = args[0]
+input_filenames = args[1:]
+logging.info('Using genome: %s', genome_id)
+logging.info('Input files:')
+for input_filename in input_filenames:
+    logging.info('    %s', input_filename)
+
 
 #
 # We might be repeatedly running this script from an interactive session.
@@ -36,7 +42,7 @@ except NameError:
 #
 # For each input file
 #
-for input_filename in args[1:]:
+for input_filename in input_filenames:
     #
     # Combine the regions so we have one sequence for each contiguous interval
     #
