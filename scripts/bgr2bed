@@ -1,0 +1,27 @@
+#!/usr/bin/python2
+
+"""
+Converts BGR files to BED making up region names as we go.
+"""
+
+import pybedtools, sys
+
+# open the input
+if len(sys.argv) < 2:
+    input = sys.stdin
+else:
+    input = open(sys.argv[1])
+    
+for i, line in enumerate(input):
+    if line.startswith('track') or line.startswith('browser'):
+        continue
+    record = line.split('\t')
+    sys.stdout.write(
+        '%s\t%s\t%s\tr%d\t%s' % (
+            record[0],
+            record[1],
+            record[2],
+            i,
+            record[3]
+        )
+    )
