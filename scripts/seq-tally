@@ -61,7 +61,7 @@ for fasta in args:
     
     if options.pie:
         # Make a pie chart of nucleotide composition.
-        from pylab import figure, axes, pie
+        from pylab import figure, axes, pie, close
         import weblogolib.colorscheme as schemes
         scheme = schemes.nucleotide
         def color_for_base(b):
@@ -73,4 +73,8 @@ for fasta in args:
         pie_filename = '%s-pie.png' % fasta
         print 'Saving pie chart to %s' % pie_filename
         fig.savefig(pie_filename, bbox_inches='tight')
+        pie_filename = '%s-pie.eps' % fasta
+        print 'Saving pie chart to %s' % pie_filename
+        fig.savefig(pie_filename, bbox_inches='tight')
+        close()
         
