@@ -12,13 +12,14 @@ from distutils.core import setup
 
 setup(
     name              = 'bioinf-utilities',
-    version           = '1.3.11',
+    version           = '1.3.12',
     description       = 'Some utilities for sequence analysis',
     long_description  = open('README.txt').read(),
     author            = 'John Reid',
     author_email      = 'johnbaronreid@netscape.net',
     scripts = [
         'scripts/bedtools2fasta',
+        'scripts/bgr2bed',
         'scripts/seq-filter-empty',
         'scripts/seq-head',
         'scripts/seq-info',
