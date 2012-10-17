@@ -4,7 +4,7 @@
 Converts BGR files to BED making up region names as we go.
 """
 
-import pybedtools, sys
+import sys
 
 # open the input
 if len(sys.argv) < 2:

@@ -1,0 +1,30 @@
+#!/usr/bin/python2
+
+"""
+Uses pybedtools to report on the size of a BED file.
+"""
+
+import pybedtools
+from optparse import OptionParser
+
+
+#
+# Parse the options
+#
+option_parser = OptionParser(
+    usage="USAGE: %prog <BED files> ..."
+)
+options, args = option_parser.parse_args()
+
+
+#
+# Open each BED file and report contents
+#
+for bed_file in args:
+    bedtool = pybedtools.BedTool(bed_file)
+    num_intervals = 0
+    num_bases = 0
+    for interval in bedtool:
+        num_intervals += 1
+        num_bases += interval.length
+    print '%s: %d intervals; %d bases' % (bed_file, num_intervals, num_bases)
