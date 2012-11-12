@@ -1,0 +1,25 @@
+#!/bin/bash -e
+
+FASTA=etc
+
+seq-filter-empty $FASTA/test.fa.gz
+seq-filter-empty $FASTA/test.fa
+seq-head $FASTA/test.fa.gz
+seq-head $FASTA/test.fa
+seq-info $FASTA/test.fa.gz
+seq-info $FASTA/test.fa
+seq-mask-lower $FASTA/test.fa.gz
+seq-mask-lower $FASTA/test.fa
+seq-match-lengths $FASTA/test.fa.gz $FASTA/test.fa $FASTA/test-out.fa.gz
+seq-match-lengths $FASTA/test.fa.gz $FASTA/test.fa $FASTA/test-out.fa
+seq-shorten $FASTA/test.fa.gz 10
+seq-shorten $FASTA/test.fa 10
+seq-shuffle $FASTA/test.fa.gz
+seq-shuffle $FASTA/test.fa
+seq-strip-Ns $FASTA/test.fa.gz
+seq-strip-Ns $FASTA/test.fa
+seq-subtract $FASTA/test.fa.gz $FASTA/test.fa
+seq-tally $FASTA/test.fa.gz
+seq-tally $FASTA/test.fa
+seq-upper $FASTA/test.fa.gz
+seq-upper $FASTA/test.fa

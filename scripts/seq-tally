@@ -10,6 +10,7 @@ Code that reads in sequences from a FASTA file and counts occurrences of charact
 
 import sys, corebio.seq_io.fasta_io as F, corebio.seq, numpy
 from optparse import OptionParser
+import bioinfutils
 
 def weblogo_color_to_tuple(col):
     """Convert a weblogolib color object to a RGB tuple.
@@ -37,7 +38,7 @@ for fasta in args:
     tally = numpy.zeros(len(alphabet), dtype=int)
     num_seqs = 0
     for seq in F.iterseq(
-        open(fasta, 'r'),
+        bioinfutils.open_input(fasta),
         alphabet
     ):
         tally += seq.tally()

@@ -10,6 +10,7 @@ Code that reads in 2 sets of sequences and outputs those in the first that are n
 
 import sys, corebio.seq_io.fasta_io as F, corebio.seq
 from optparse import OptionParser
+import bioinfutils
 
 #
 # Parse the options
@@ -26,9 +27,9 @@ if 2 != len(args):
 fasta1, fasta2 = args
 
 # read in second fasta
-to_subtract = set(seq.description.strip().lower() for seq in F.iterseq(open(fasta2, 'r'), corebio.seq.dna_alphabet))
+to_subtract = set(seq.description.strip().lower() for seq in F.iterseq(bioinfutils.open_input(fasta2), corebio.seq.dna_alphabet))
 
 # read in first fasta
-for seq in F.iterseq(open(fasta1, 'r'), corebio.seq.dna_alphabet):
+for seq in F.iterseq(bioinfutils.open_input(fasta1), corebio.seq.dna_alphabet):
     if seq.description.strip().lower() not in to_subtract:
         F.writeseq(sys.stdout, seq)

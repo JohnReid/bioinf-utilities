@@ -10,6 +10,7 @@ Code that reads in sequences and outputs first so many
 
 import sys, corebio.seq_io.fasta_io as F, corebio.seq
 from optparse import OptionParser
+import bioinfutils
 
 #
 # Parse the options
@@ -35,7 +36,7 @@ fasta = args[0]
 if '-' == fasta:
     input = sys.stdin
 else:
-    input = open(fasta, 'r')
+    input = bioinfutils.open_input(fasta)
 
 for i, seq in zip(xrange(options.num_seqs), F.iterseq(input, corebio.seq.dna_alphabet)):
     F.writeseq(sys.stdout, seq)

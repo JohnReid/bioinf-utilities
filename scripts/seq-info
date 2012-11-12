@@ -10,6 +10,7 @@ Code that reads in sequences from a FASTA file and prints information about them
 
 import sys, corebio.seq_io.fasta_io as F, corebio.seq, numpy
 from optparse import OptionParser
+import bioinfutils
 
 #
 # Parse the options
@@ -45,7 +46,7 @@ for fasta in args:
     min_length = -1
     num_empty = 0
     for seq in F.iterseq(
-        open(fasta, 'r'),
+        bioinfutils.open_input(fasta),
         alphabet
     ):
         num_seqs += 1

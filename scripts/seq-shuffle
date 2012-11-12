@@ -10,6 +10,7 @@ Code that reads in sequences and shuffles them.
 
 import sys, corebio.seq_io.fasta_io as F, corebio.seq, numpy as N, numpy.random as R
 from optparse import OptionParser
+import bioinfutils
 
 
 def is_unknown(x):
@@ -42,9 +43,10 @@ def shuffle(seq):
         if not key:
             R.shuffle(ords[begin:end])
     shuffled = seq.alphabet.chrs(ords)
-    shuffled.name = '%s (shuffled)' % seq.name,
-    shuffled.description = '%s (shuffled)' % seq.description,
-    shuffled.alphabet = seq.alphabet
+    shuffled.name = '%s (shuffled)' % seq.name
+    shuffled.description = '%s (shuffled)' % seq.description
+    # this should be correct already
+    #shuffled.alphabet = seq.alphabet
     return shuffled
 
 
@@ -68,7 +70,7 @@ fasta = args[0]
 # Shuffle the sequences
 #
 for seq in F.iterseq(
-    open(fasta, 'r'),
+    bioinfutils.open_input(fasta),
     corebio.seq.dna_alphabet
 ):
     F.writeseq(sys.stdout, shuffle(seq))

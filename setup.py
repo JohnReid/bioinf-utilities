@@ -12,7 +12,7 @@ from distutils.core import setup
 
 setup(
     name              = 'bioinf-utilities',
-    version           = '1.3.17',
+    version           = '1.3.20',
     description       = 'Some utilities for sequence analysis',
     long_description  = open('README.txt').read(),
     author            = 'John Reid',

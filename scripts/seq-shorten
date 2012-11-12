@@ -10,6 +10,7 @@ Code that reads in sequences from a FASTA file and shortens each sequence.
 
 import sys, corebio.seq_io.fasta_io as F, corebio.seq
 from optparse import OptionParser
+import bioinfutils
 
 
 
@@ -46,10 +47,7 @@ if 2 != len(args):
 
 fasta = args[0]
 length = int(args[1])
-if '-' == fasta:
-    input = sys.stdin
-else:
-    input = open(fasta, 'r')
+input = bioinfutils.open_input(fasta)
 
 #
 # Read the sequences

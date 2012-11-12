@@ -62,12 +62,30 @@ def upper(seq):
 
 
 
+def file_opener(filename):
+    """Returns a function to open the file. Will check if filename ends in ".gz",
+    if so it will return gzip.open.
+    """
+    if filename.endswith('.gz'):
+        import gzip
+        return gzip.open
+    else:
+        return open
+
+
+def open_potentially_gzipped(filename, mode):
+    """Opens the file. Handles compressed files by testing if the filename
+    ends in ".gz"
+    """
+    return file_opener(filename)(filename, mode)
+
+
 def open_fasta(fasta, default, mode):
     "Open a FASTA file or return default if fasta filename is '-'"
     if '-' == fasta:
         return default
     else:
-        return open(fasta, mode)
+        return open_potentially_gzipped(fasta, mode)
 
 open_input = partial(open_fasta, default=sys.stdin, mode='r')
 open_output = partial(open_fasta, default=sys.stdout, mode='w')
