@@ -1,0 +1,35 @@
+#!/usr/bin/env python2
+
+"""
+Outputs a BED file that can be used as a background set for the GREAT web service.
+
+http://bejerano.stanford.edu/great/public/html/index.php
+"""
+
+import pybedtools, sys
+from optparse import OptionParser
+
+
+
+parser = OptionParser(
+    usage = "%prog <foreground bed> <background bed> <output bed>"
+)
+parser.add_option(
+    "--subsample",
+    help="subsample to have at most NUM regions in non-foreground set.",
+    default=0,
+    type=int,
+    metavar="NUM"
+)
+options, args = parser.parse_args()
+if 3 != len(args):
+    print parser.print_help()
+    sys.exit(-1)
+fg = pybedtools.BedTool(args[0])
+bg = pybedtools.BedTool(args[1])
+
+non_fg = bg.subtract(fg)
+if options.subsample:
+    non_fg = non_fg.random_subset(options.subsample)
+universe = non_fg.cat(fg, postmerge=False).sort()
+universe.saveas(args[2])
