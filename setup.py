@@ -12,7 +12,7 @@ from distutils.core import setup
 
 setup(
     name              = 'bioinf-utilities',
-    version           = '1.3.20',
+    version           = '1.3.21',
     description       = 'Some utilities for sequence analysis',
     long_description  = open('README.txt').read(),
     author            = 'John Reid',
@@ -22,6 +22,7 @@ setup(
         'scripts/bed-info',
         'scripts/bedtools2fasta',
         'scripts/bgr2bed',
+        'scripts/make-GREAT-bg',
         'scripts/seq-filter-empty',
         'scripts/seq-head',
         'scripts/seq-info',
@@ -33,6 +34,7 @@ setup(
         'scripts/seq-subtract',
         'scripts/seq-tally',
         'scripts/seq-upper',
+        'scripts/subsample',
     ],
     url               = 'http://sysbio.mrc-bsu.cam.ac.uk/group/index.php/John_Reid',
     package_dir       = {'': 'python'},
