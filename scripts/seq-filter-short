@@ -1,0 +1,34 @@
+#!/usr/bin/env python2
+#
+# Copyright John Reid 2010, 2012, 2013
+#
+
+"""
+Code that reads in sequences from a FASTA file and outputs only
+those longer than a threshold.
+"""
+
+
+import sys
+import corebio.seq_io.fasta_io as F
+import corebio.seq
+import bioinfutils
+
+
+#
+# Check args
+#
+if 3 != len(sys.argv):
+    print >> sys.stderr, 'USAGE: %s <fasta file> <min length>' % sys.argv[0]
+    sys.exit(-1)
+input = bioinfutils.open_input(sys.argv[1])
+minlength = int(sys.argv[2])
+
+
+#
+# Read the sequences
+#
+alphabet = corebio.seq.reduced_nucleic_alphabet
+for i, seq in enumerate(F.iterseq(input, alphabet)):
+    if len(seq) >= minlength:
+        F.writeseq(sys.stdout, seq)
