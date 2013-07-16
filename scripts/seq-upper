@@ -1,6 +1,6 @@
 #!/usr/bin/env python2
 #
-# Copyright John Reid 2012
+# Copyright John Reid 2012, 2013
 #
 
 """
@@ -8,7 +8,9 @@ Make all bases upper case. Trawler needs all sequences in upper case.
 """
 
 
-import sys, corebio.seq_io.fasta_io as F, corebio.seq
+import sys
+import corebio.seq_io.fasta_io as F
+import corebio.seq
 import bioinfutils
 
 

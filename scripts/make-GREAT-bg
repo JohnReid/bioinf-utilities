@@ -1,18 +1,22 @@
 #!/usr/bin/env python2
+#
+# Copyright John Reid 2013
+#
 
 """
-Outputs a BED file that can be used as a background set for the GREAT web service.
+Outputs a BED file that can be used as a background set for the
+GREAT web service.
 
 http://bejerano.stanford.edu/great/public/html/index.php
 """
 
-import pybedtools, sys
+import pybedtools
+import sys
 from optparse import OptionParser
 
 
-
 parser = OptionParser(
-    usage = "%prog <foreground bed> <background bed> <output bed>"
+    usage="%prog <foreground bed> <background bed> <output bed>"
 )
 parser.add_option(
     "--subsample",

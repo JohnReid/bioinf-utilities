@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
-# Copyright John Reid 2009,2010
+# Copyright John Reid 2009, 2010, 2013
 #
 
 """
@@ -8,7 +8,9 @@ Code that reads in sequences and outputs first so many
 """
 
 
-import sys, corebio.seq_io.fasta_io as F, corebio.seq
+import sys
+import corebio.seq_io.fasta_io as F
+import corebio.seq
 from optparse import OptionParser
 import bioinfutils
 
@@ -38,5 +40,7 @@ if '-' == fasta:
 else:
     input = bioinfutils.open_input(fasta)
 
-for i, seq in zip(xrange(options.num_seqs), F.iterseq(input, corebio.seq.dna_alphabet)):
+for i, seq in zip(
+        xrange(options.num_seqs),
+        F.iterseq(input, corebio.seq.dna_alphabet)):
     F.writeseq(sys.stdout, seq)

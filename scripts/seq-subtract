@@ -1,14 +1,17 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
-# Copyright John Reid 2009
+# Copyright John Reid 2009, 2013
 #
 
 """
-Code that reads in 2 sets of sequences and outputs those in the first that are not in the second.
+Code that reads in 2 sets of sequences and outputs those
+in the first that are not in the second.
 """
 
 
-import sys, corebio.seq_io.fasta_io as F, corebio.seq
+import sys
+import corebio.seq_io.fasta_io as F
+import corebio.seq
 from optparse import OptionParser
 import bioinfutils
 
@@ -27,7 +30,10 @@ if 2 != len(args):
 fasta1, fasta2 = args
 
 # read in second fasta
-to_subtract = set(seq.description.strip().lower() for seq in F.iterseq(bioinfutils.open_input(fasta2), corebio.seq.dna_alphabet))
+to_subtract = set(
+    seq.description.strip().lower()
+    for seq
+    in F.iterseq(bioinfutils.open_input(fasta2), corebio.seq.dna_alphabet))
 
 # read in first fasta
 for seq in F.iterseq(bioinfutils.open_input(fasta1), corebio.seq.dna_alphabet):

@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
-# Copyright John Reid 2009
+# Copyright John Reid 2009, 2013
 #
 
 """
@@ -8,7 +8,11 @@ Code that reads in sequences and shuffles them.
 """
 
 
-import sys, corebio.seq_io.fasta_io as F, corebio.seq, numpy as N, numpy.random as R
+import sys
+import corebio.seq_io.fasta_io as F
+import corebio.seq
+import numpy as N
+import numpy.random as R
 from optparse import OptionParser
 import bioinfutils
 
@@ -19,7 +23,9 @@ def is_unknown(x):
 
 
 def partition(iterable, keyfunc=None):
-    "Partition an iterable into groups for which keyfunc returns the same value. Yields (key, begin, end) tuples."
+    """Partition an iterable into groups for which keyfunc
+    returns the same value. Yields (key, begin, end) tuples.
+    """
     if keyfunc is None:
         keyfunc = lambda x: x
     iterable = iter(iterable)

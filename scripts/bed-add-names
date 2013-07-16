@@ -1,4 +1,7 @@
-#!/usr/bin/python2
+#!/usr/bin/env python2
+#
+# Copyright John Reid 2013
+#
 
 """
 Takes 3 column BED input with just
@@ -10,7 +13,6 @@ and adds fourth name column.
 
 import sys
 from optparse import OptionParser
-
 
 
 #
@@ -32,7 +34,7 @@ if len(args) < 1:
     input = sys.stdin
 else:
     input = open(args[0])
-    
+
 i = 0
 for line in input:
     if line.startswith('track') or line.startswith('browser'):

@@ -1,17 +1,22 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
-# Copyright John Reid 2012
+# Copyright John Reid 2012, 2013
 #
 
 """
-Creates a FASTA file of the sequences stored in the interval file (BED, BED graph, GFF).
+Creates a FASTA file of the sequences stored in the interval
+file (BED, BED graph, GFF).
 """
 
 
 import logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-import biopsy.data.ucsc as UCSC, pybedtools, pyicl, sys
+import biopsy.data.ucsc as UCSC
+import pybedtools
+import pyicl
+import sys
 from optparse import OptionParser
 from collections import defaultdict
 from Bio import SeqIO
@@ -33,9 +38,7 @@ for input_filename in input_filenames:
 # We might be repeatedly running this script from an interactive session.
 # In that case we do not wish to create a new genome object every time.
 #
-try:
-    genome
-except NameError:
+if 'genome' not in locals():
     genome = UCSC.Genome(genome_id)
 
 

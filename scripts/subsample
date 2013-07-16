@@ -1,15 +1,19 @@
 #!/usr/bin/env python2
+#
+# Copyright John Reid 2013
+#
 
 """
 Subsamples lines from files or stdin if no files given.
 """
 
-import sys, random
+import sys
+import random
 from optparse import OptionParser
 
 
 parser = OptionParser(
-    usage = "%prog [options] [FILE] ..."
+    usage="%prog [options] [FILE] ..."
 )
 parser.add_option(
     "--percent",
@@ -29,6 +33,7 @@ options, args = parser.parse_args()
 if options.seed:
     random.seed(options.seed)
 
+
 def subsample(handle):
     for line in handle:
         if random.random() < options.percent / 100:
@@ -39,4 +44,3 @@ if args:
         subsample(open(filename))
 else:
     subsample(sys.stdin)
-

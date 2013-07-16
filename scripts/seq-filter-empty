@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #
-# Copyright John Reid 2010, 2012
+# Copyright John Reid 2010, 2012, 2013
 #
 
 """
@@ -8,8 +8,9 @@ Code that reads in sequences from a FASTA file and outputs the non-empty ones.
 """
 
 
-import sys, corebio.seq_io.fasta_io as F, corebio.seq, numpy
-from optparse import OptionParser
+import sys
+import corebio.seq_io.fasta_io as F
+import corebio.seq
 import bioinfutils
 
 
