@@ -1,0 +1,137 @@
+#!/usr/bin/env python2
+#
+# Copyright John Reid 2013
+#
+
+"""
+Use dynamic programming to remove overlaps from BED file. Output sequence
+of intervals with highest summed score.
+"""
+
+import logging
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)-15s:%(levelname)s: %(message)s')
+logger = logging.getLogger(__name__)
+
+import pybedtools
+import bisect
+import sys
+from optparse import OptionParser
+from collections import namedtuple
+
+
+#
+# Set up options and parse them
+#
+usage = 'USAGE: %prog [options] <regions>'
+parser = OptionParser(usage=usage)
+parser.add_option(
+    "-o", "--output",
+    help="Write output to OUTPUT", metavar="OUTPUT")
+options, args = parser.parse_args()
+if 1 != len(args):
+    parser.error('Incorrect number of arguments')
+regions_file = args[0]
+if not options.output:
+    out = sys.stdout
+else:
+    out = open(options.output, 'w')
+
+
+#
+# Load regions
+#
+bed = pybedtools.BedTool(regions_file)
+
+
+class Element(namedtuple('Element', ['end', 'interval', 'score', 'previous'])):
+    __slots__ = ()
+
+    def __repr__(self):
+        return 'Element(%r, score=%f, previous=%r)' % (
+            self.interval,
+            self.score,
+            self.previous is not None and self.previous.interval or None
+        )
+
+
+def candidates(pos):
+    """Yield the candidate previous intervals in our chain."""
+    last = 0  # The point at which we can stop looking for a previous interval
+    for lo in xrange(len(best) - 1, -1, -1):
+        candidate = best[lo]
+        if candidate.interval.end <= last:
+            break
+        if candidate.interval.end > pos:
+            continue  # Ignore candidates that overlap us
+        yield lo
+        last = max(last, candidate.interval.start)
+
+
+def insert(element, lo):
+    """Insert the element into our sorted list. Lo is the lowest point
+    at which it can be inserted."""
+    insertion_point = bisect.bisect(best, element, lo)
+    if 0 == insertion_point:
+        best.insert(insertion_point, element)
+    else:
+        competitor = best[insertion_point - 1]
+        if competitor.score < element.score:
+            if competitor.end != element.end:
+                best.insert(insertion_point, element)
+            else:
+                best[insertion_point - 1] = element
+
+
+def output_chain(chrom):
+    """Find the chain with the best score and print it."""
+    best_endpoint = max(
+        (best[i] for i in candidates(best[-1].end)), key=lambda c: c.score)
+    while best_endpoint is not None:
+        interval = best_endpoint.interval
+        print >>out, '%s\t%d\t%d\t%s\t%s\t%s' % (
+            chrom,
+            interval.start,
+            interval.end,
+            interval.name,
+            interval.score,
+            interval.strand)
+        best_endpoint = best_endpoint.previous
+    out.flush()
+
+
+#
+# Iterate through regions calculating best non-overlapping intervals
+#
+# We maintain a sorted list of elements. Each element represents the
+# best chain of intervals that ends at a particular point. Each element
+# links back to the previous element in the chain. The sort key is the
+# end-point of the interval
+#
+curr_chr = None
+best = []
+for interval in bed:
+    if interval.chrom != curr_chr:
+        if curr_chr:
+            output_chain(curr_chr)
+        curr_chr = interval.chrom
+        best = []
+
+    # work out what the best total using this interval is
+    previous = None  # The previous interval that gives us the best chain
+    lo = 0
+    for lo in candidates(interval.start):
+        candidate = best[lo]
+        if previous is None or previous.score < candidate.score:
+            previous = candidate
+    score = float(interval.score)
+    if previous is not None:
+        score += previous.score
+    element = Element(
+        end=interval.end,
+        interval=interval,
+        score=score,
+        previous=previous)
+    insert(element, lo)
+if best:
+    output_chain(curr_chr)
