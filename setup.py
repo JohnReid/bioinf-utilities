@@ -8,7 +8,8 @@
 distutils setup script
 """
 
-from distutils.core import setup
+#from distutils.core import setup
+from distutils2.core import setup
 
 setup(
     name              = 'bioinf-utilities',
