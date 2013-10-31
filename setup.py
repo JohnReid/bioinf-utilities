@@ -8,8 +8,7 @@
 distutils setup script
 """
 
-#from distutils.core import setup
-from distutils2.core import setup
+from setuptools import setup
 
 setup(
     name              = 'bioinf-utilities',
@@ -42,5 +41,5 @@ setup(
     url               = 'http://sysbio.mrc-bsu.cam.ac.uk/group/index.php/John_Reid',
     package_dir       = {'': 'python'},
     packages          = ['bioinfutils'],
-    requires          = ['cookbook'],
+    install_requires  = ['cookbook'],
 )
