@@ -41,4 +41,5 @@ setup(
     url               = 'http://sysbio.mrc-bsu.cam.ac.uk/group/index.php/John_Reid',
     package_dir       = {'': 'python'},
     packages          = ['bioinfutils'],
+    requires          = ['cookbook'],
 )
