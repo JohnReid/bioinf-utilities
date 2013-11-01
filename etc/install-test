@@ -1,0 +1,19 @@
+#!/bin/bash -ex
+
+ENV=install-test-env
+virtualenv $ENV
+. $ENV/bin/activate
+
+# Install from git
+pip install git+https://github.com/JohnReid/bioinf-utilities.git
+python -c "import bioinfutils"
+pip uninstall bioinf-utilities
+
+# Install from PyPI
+pip install bioinf-utilities
+python -c "import bioinfutils"
+pip uninstall bioinf-utilities
+
+# Install local version
+python setup.py install
+python -c "import bioinfutils"
