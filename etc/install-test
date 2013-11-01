@@ -1,6 +1,7 @@
 #!/bin/bash -ex
 
 ENV=install-test-env
+[ ! -d $ENV ]
 virtualenv $ENV
 . $ENV/bin/activate
 
