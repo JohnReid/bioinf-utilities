@@ -42,4 +42,8 @@ setup(
     package_dir       = {'': 'python'},
     packages          = ['bioinfutils', 'corebio'],
     install_requires  = ['cookbook'],
+    package_data = {
+        # Include corebio LICENSE
+        'corebio': ['LICENSE.txt'],
+}
 )
