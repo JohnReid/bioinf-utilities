@@ -8,12 +8,12 @@ virtualenv $ENV
 # Install from git
 pip install git+https://github.com/JohnReid/bioinf-utilities.git
 python -c "import bioinfutils"
-pip uninstall bioinf-utilities
+pip uninstall --yes bioinf-utilities
 
 # Install from PyPI
 pip install bioinf-utilities
 python -c "import bioinfutils"
-pip uninstall bioinf-utilities
+pip uninstall --yes bioinf-utilities
 
 # Install local version
 python setup.py install
