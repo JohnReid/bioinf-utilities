@@ -12,7 +12,7 @@ from setuptools import setup
 
 setup(
     name              = 'bioinf-utilities',
-    version           = '1.3.23',
+    version           = '1.3.24',
     description       = 'Some utilities for sequence analysis',
     long_description  = open('README.txt').read(),
     author            = 'John Reid',

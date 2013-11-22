@@ -21,7 +21,7 @@ import bioinfutils
 if 3 != len(sys.argv):
     print >> sys.stderr, 'USAGE: %s <fasta file> <min length>' % sys.argv[0]
     sys.exit(-1)
-input = bioinfutils.open_input(sys.argv[1])
+input = '-' == sys.argv[1] and sys.stdin or bioinfutils.open_input(sys.argv[1])
 minlength = int(sys.argv[2])
 
 
